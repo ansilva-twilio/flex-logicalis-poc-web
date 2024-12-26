@@ -1,0 +1,14 @@
+.container {
+  width: 100%;
+  height: calc(100vh);
+  position: relative;
+  padding: 0 !important;
+}
+
+.main-logo {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translateY(-50%);
+  transform: translateX(-50%);
+}
