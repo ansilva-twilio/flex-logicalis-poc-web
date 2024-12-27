@@ -6,7 +6,7 @@ import { Box } from '@twilio-paste/core/box';
 function FollowUpTabPanel () {
     return (
         <>
-            <TabPanel borderLeft="solid 1px #ddd" borderRight="solid 1px #ddd" borderBottom="solid 1px #ddd" padding="space60">
+            <TabPanel element="MAIN_TAB_PANEL">
                 <Box>
                     <Box paddingBottom="space160">
                         <PageHeader>
