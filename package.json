@@ -1,6 +1,6 @@
 {
   "name": "agent-website",
-  "homepage": "https://ansilva-twilio.github.io/",
+  "homepage": "https://ansilva-twilio.github.io/flex-logicalis-poc-web/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
