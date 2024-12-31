@@ -28,9 +28,7 @@ function App() {
 
   useEffect(() => {
     const params = Object.fromEntries(new URLSearchParams(window.location.search));
-    
     setToken(params.token);
-    console.log('Token', token);
 
     if (params.incident && params.incident !== "") {
       setIncident(params.incident);
@@ -47,7 +45,7 @@ function App() {
       let config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: 'https://logicalis-2335.twil.io/getData',
+        url: `https://logicalis-2335.twil.io/getData?Token=${token}&Incident=${incident}`,
         headers: { 
           'Content-Type': 'application/json', 
         },
@@ -56,7 +54,6 @@ function App() {
           Incident: incident
         }
       };
-      console.log('incident request', config);
 
       axios.request(config)
         .then((response) => { 
