@@ -18,6 +18,7 @@ import { customPasteElements } from './assets/CustomPasteElements';
 import './App.css';
 
 function App() {
+  const [token, setToken] = useState('');
   const [loaded, setLoaded] = useState(false);
   const [data, setData] = useState({});
   const [noData, setNoData] = useState(false);
@@ -26,11 +27,11 @@ function App() {
   const selectedId = useUID();
 
   useEffect(() => {
-    console.log('TESTING=')
-    console.log(window.parent.Twilio);
-    
     const params = Object.fromEntries(new URLSearchParams(window.location.search));
     
+    setToken(params.token);
+    console.log('Token', token);
+
     if (params.incident && params.incident !== "") {
       setIncident(params.incident);
     } else if (params.requestItem && params.requestItem !== "") {
@@ -46,15 +47,16 @@ function App() {
       let config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: 'https://logicalis-2335.twil.io/getData?incident=' + incident,
+        url: 'https://logicalis-2335.twil.io/getData',
         headers: { 
           'Content-Type': 'application/json', 
         },
-        auth: {
-          username: 'logicalis',
-          password: 'A8k9Kg26LL2bk377'
+        body: {
+          Token: token,
+          Incident: incident
         }
       };
+      console.log('incident request', config);
 
       axios.request(config)
         .then((response) => { 
