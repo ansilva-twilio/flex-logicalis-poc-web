@@ -26,6 +26,9 @@ function App() {
   const selectedId = useUID();
 
   useEffect(() => {
+    console.log('TESTING=')
+    console.log(window.parent.Twilio);
+    
     const params = Object.fromEntries(new URLSearchParams(window.location.search));
     
     if (params.incident && params.incident !== "") {

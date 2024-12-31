@@ -8,71 +8,89 @@ import { Heading } from '@twilio-paste/core/heading';
 import { useUID } from "@twilio-paste/core/uid-library";
 
 function IncidentDetailsTabPanel (props) {
-    // eslint-disable-next-line
-    const [workNotes, setWorkNotes] = useState([{
-        "sys_id": "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6",
-        "element_id": "46d44e7f1b223010abc45d8ce1050e14",
-        "name": "incident",
-        "element": "comments",
-        "value": "The user confirmed that they are experiencing intermittent connectivity issues.",
-        "sys_created_by": "Jane Smith",
-        "sys_created_on": "2024-12-25 08:45:00",
-        "update_id": "u56789abcdef12345ghijklmnopqrstuv",
-        "journal_type": "comments"
-      },
-      {
-        "sys_id": "b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6a1",
-        "element_id": "46d44e7f1b223010abc45d8ce1050e14",
-        "name": "incident",
-        "element": "work_notes",
-        "value": "Initial diagnosis shows no issues with the network. Investigating further.",
-        "sys_created_by": "John Doe",
-        "sys_created_on": "2024-12-25 09:00:00",
-        "update_id": "v56789abcdef12345ghijklmnopqrstuv",
-        "journal_type": "work_notes"
-      },
-      {
-        "sys_id": "c3d4e5f6g7h8i9j0k1l2m3n4o5p6a1b2",
-        "element_id": "46d44e7f1b223010abc45d8ce1050e14",
-        "name": "incident",
-        "element": "comments",
-        "value": "The user has requested to be updated via email once the issue is resolved.",
-        "sys_created_by": "Jane Smith",
-        "sys_created_on": "2024-12-25 09:15:00",
-        "update_id": "w56789abcdef12345ghijklmnopqrstuv",
-        "journal_type": "comments"
-      },
-      {
-        "sys_id": "d4e5f6g7h8i9j0k1l2m3n4o5p6a1b2c3",
-        "element_id": "46d44e7f1b223010abc45d8ce1050e14",
-        "name": "incident",
-        "element": "work_notes",
-        "value": "Network team confirmed no outages. Escalating to email server team.",
-        "sys_created_by": "John Doe",
-        "sys_created_on": "2024-12-25 09:30:00",
-        "update_id": "x56789abcdef12345ghijklmnopqrstuv",
-        "journal_type": "work_notes"
-      }]);
+    const [workNotes, setWorkNotes] = useState([]);
     const [isComment, setIsComment] = useState(false);
     const [priority, setPriority] = useState('');
-
+    const [impacts, setImpacts] = useState([]);
+    const [selectedImpact, setSelectedImpact] = useState(0);
+    const [urgencies, setUrgencies] = useState([]);
+    const [selectedUrgency, setSelectedUrgency] = useState(0);
+    
     const incidentStates = [ '1 - Novo', '2 - Em andamento', '3 - Pendente', '4 - Encerrado'];
-    const impacts = [ 1, 2, 3, 4, 5 ];
-    const urgencies = [ 1, 2, 3, 4, 5 ];
     const assignmentGroups = [ 'N1', 'N2', 'N3' ];
     const assignableUsers = [ 'André Silva', 'Luiz Cordeiro' ];
 
     useEffect(() => {
-        console.log('something changed (impact or urgency)');
-        if (props.data?.impact < 3 && props.data?.urgency < 3) {
+        console.log('Component mounted with props:', props);
+
+        setImpacts([ 1, 2, 3, 4, 5 ]);
+        setSelectedImpact(props.data?.impact);
+        setUrgencies([ 1, 2, 3, 4, 5]);
+        setSelectedUrgency(props.data?.urgency);
+
+        //TODO: consultar uma Function para obter os Work Notes
+        setWorkNotes([{
+            "sys_id": "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6",
+            "element_id": "46d44e7f1b223010abc45d8ce1050e14",
+            "name": "incident",
+            "element": "comments",
+            "value": "The user confirmed that they are experiencing intermittent connectivity issues.",
+            "sys_created_by": "Jane Smith",
+            "sys_created_on": "2024-12-25 08:45:00",
+            "update_id": "u56789abcdef12345ghijklmnopqrstuv",
+            "journal_type": "comments"
+          },
+          {
+            "sys_id": "b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6a1",
+            "element_id": "46d44e7f1b223010abc45d8ce1050e14",
+            "name": "incident",
+            "element": "work_notes",
+            "value": "Initial diagnosis shows no issues with the network. Investigating further.",
+            "sys_created_by": "John Doe",
+            "sys_created_on": "2024-12-25 09:00:00",
+            "update_id": "v56789abcdef12345ghijklmnopqrstuv",
+            "journal_type": "work_notes"
+          },
+          {
+            "sys_id": "c3d4e5f6g7h8i9j0k1l2m3n4o5p6a1b2",
+            "element_id": "46d44e7f1b223010abc45d8ce1050e14",
+            "name": "incident",
+            "element": "comments",
+            "value": "The user has requested to be updated via email once the issue is resolved.",
+            "sys_created_by": "Jane Smith",
+            "sys_created_on": "2024-12-25 09:15:00",
+            "update_id": "w56789abcdef12345ghijklmnopqrstuv",
+            "journal_type": "comments"
+          },
+          {
+            "sys_id": "d4e5f6g7h8i9j0k1l2m3n4o5p6a1b2c3",
+            "element_id": "46d44e7f1b223010abc45d8ce1050e14",
+            "name": "incident",
+            "element": "work_notes",
+            "value": "Network team confirmed no outages. Escalating to email server team.",
+            "sys_created_by": "John Doe",
+            "sys_created_on": "2024-12-25 09:30:00",
+            "update_id": "x56789abcdef12345ghijklmnopqrstuv",
+            "journal_type": "work_notes"
+          }]);
+
+    // eslint-disable-next-line 
+    }, []); // Empty dependency array ensures this runs only once after mounting
+
+    // TODO: colocar regra para calcular prioridade de acordo com os valores de Impacto e Urgência (Matriz)
+    useEffect(() => {
+        if (selectedImpact <= 3 && selectedUrgency <= 3) {
             setPriority('1 - Baixa');
-        } else if (props.data?.impact > 3 || props.data?.urgency > 3) {
+        } else if (
+            (selectedImpact > 3 && selectedUrgency <= 3) || 
+            (selectedUrgency > 3 && selectedImpact <= 3) || 
+            (selectedImpact === 4 && selectedUrgency === 4)
+        ) {
             setPriority('2 - Média');
         } else {
             setPriority('3 - Alta');
         }
-
-    }, [props.data?.impact, props.data?.urgency]);
+    }, [selectedImpact, selectedUrgency]);
 
     return (
         <TabPanel element="MAIN_TAB_PANEL">
@@ -102,67 +120,78 @@ function IncidentDetailsTabPanel (props) {
                         <Heading as="h2" variant="heading20">
                         Dados
                         </Heading>
-                        <Box display="flex" columnGap="space70" width="size60">
-                        <Box width="size30">
-                            <DescriptionList>
-                            <DescriptionListSet>
-                                <DescriptionListDetails>
-                                    <Label htmlFor='number' required>Número</Label>
-                                    <Input id="number" name="number" type="text" value={props.data?.number} readOnly />
-                                </DescriptionListDetails>
-                            </DescriptionListSet>
-                            <DescriptionListSet>
-                                <DescriptionListDetails>
-                                    <Combobox id="state" name="state" items={incidentStates} initialSelectedItem={props.data?.state} labelText="Estado" required />
-                                </DescriptionListDetails>
-                            </DescriptionListSet>
-                            <DescriptionListSet>
-                                <DescriptionListDetails>
-                                    <Label htmlFor='short_description' required>Descrição</Label>
-                                    <Input id="short_description" name="short_description" type="text" value={props.data?.short_description} readOnly />
-                                </DescriptionListDetails>
-                            </DescriptionListSet>
-                            </DescriptionList>
-                        </Box>
-                        <Box width="size30">
-                            <DescriptionList>
-                            <DescriptionListSet>
-                                <DescriptionListDetails>
-                                    <Label htmlFor='opened_at' required>Aberto em</Label>
-                                    <Input id="opened_at" name="opened_at" type="text" value={ props.data?.opened_at } readOnly />
-                                </DescriptionListDetails>
-                            </DescriptionListSet>
-                            <DescriptionListSet>
-                                <DescriptionListDetails>
-                                    <Label htmlFor='opened_by' required>Aberto por</Label>
-                                    <Input id="opened_by" name="opened_by" type="text" value={ props.data?.caller_id?.display_value } readOnly />
-                                </DescriptionListDetails>
-                            </DescriptionListSet>
-                            <DescriptionListSet>
-                                <DescriptionListDetails>
-                                    <Label htmlFor='configuration_item' required>Item de Configuração</Label>
-                                    <Input id="configuration_item" name="configuration_item" type="text" value={ props.data?.configuration_item?.display_value } readOnly />
-                                </DescriptionListDetails>
-                            </DescriptionListSet>
-                            </DescriptionList>
-                        </Box>
+                        <Box display="flex" columnGap="space70" width="100%">
+                            <Box width="50%">
+                                <DescriptionList>
+                                <DescriptionListSet>
+                                    <DescriptionListDetails>
+                                        <Label htmlFor='number' required>Número</Label>
+                                        <Input id="number" name="number" type="text" value={props.data?.number} readOnly />
+                                    </DescriptionListDetails>
+                                </DescriptionListSet>
+                                <DescriptionListSet>
+                                    <DescriptionListDetails>
+                                        <Combobox id="state" name="state" items={incidentStates} initialSelectedItem={props.data?.state} labelText="Estado" required />
+                                    </DescriptionListDetails>
+                                </DescriptionListSet>
+                                <DescriptionListSet>
+                                    <DescriptionListDetails>
+                                        <Label htmlFor='short_description' required>Descrição</Label>
+                                        <Input id="short_description" name="short_description" type="text" value={props.data?.short_description} readOnly />
+                                    </DescriptionListDetails>
+                                </DescriptionListSet>
+                                </DescriptionList>
+                            </Box>
+                            <Box width="50%">
+                                <DescriptionList>
+                                <DescriptionListSet>
+                                    <DescriptionListDetails>
+                                        <Label htmlFor='opened_at' required>Aberto em</Label>
+                                        <Input id="opened_at" name="opened_at" type="text" value={ props.data?.opened_at } readOnly />
+                                    </DescriptionListDetails>
+                                </DescriptionListSet>
+                                <DescriptionListSet>
+                                    <DescriptionListDetails>
+                                        <Label htmlFor='opened_by' required>Aberto por</Label>
+                                        <Input id="opened_by" name="opened_by" type="text" value={ props.data?.caller_id?.display_value } readOnly />
+                                    </DescriptionListDetails>
+                                </DescriptionListSet>
+                                <DescriptionListSet>
+                                    <DescriptionListDetails>
+                                        <Label htmlFor='configuration_item' required>Item de Configuração</Label>
+                                        <Input id="configuration_item" name="configuration_item" type="text" value={ props.data?.configuration_item?.display_value } readOnly />
+                                    </DescriptionListDetails>
+                                </DescriptionListSet>
+                                </DescriptionList>
+                            </Box>
                         </Box>
                     </Box>
                     <Box>
                         <Heading as="h2" variant="heading20" id="classification">
                         Classificação
                         </Heading>
-                        <Box display="flex" columnGap="space70" width="size60">
-                            <Box width="size30">
+                        <Box display="flex" columnGap="space70" width="100%">
+                            <Box width="50%">
                                 <DescriptionList>
                                     <DescriptionListSet>
                                         <DescriptionListDetails>
-                                            <Combobox id="impact" name="impact" items={impacts} initialSelectedItem={props.data?.impact} labelText="Impacto" required />
+                                            <Combobox id="impact" name="impact" items={impacts} 
+                                                selectedItem={selectedImpact}
+                                                onSelectedItemChange={changes => {
+                                                    console.log(changes);
+                                                    setSelectedImpact(changes.selectedItem);
+                                                }} 
+                                                labelText="Impacto" required />
                                         </DescriptionListDetails>
                                     </DescriptionListSet>
                                     <DescriptionListSet>
                                         <DescriptionListDetails>
-                                            <Combobox id="urgency" name="urgency" items={urgencies} initialSelectedItem={props.data?.urgency} labelText="Urgência" required />
+                                            <Combobox id="urgency" name="urgency" items={urgencies} 
+                                                selectedItem={selectedUrgency}
+                                                onSelectedItemChange={changes => {
+                                                    setSelectedUrgency(changes.selectedItem);
+                                                }}  
+                                                labelText="Urgência" required />
                                         </DescriptionListDetails>
                                     </DescriptionListSet>
                                     <DescriptionListSet>
@@ -173,7 +202,7 @@ function IncidentDetailsTabPanel (props) {
                                     </DescriptionListSet>
                                 </DescriptionList>
                             </Box>
-                            <Box width="size30">
+                            <Box width="50%">
                                 <DescriptionList>
                                     <DescriptionListSet>
                                         <DescriptionListDetails>
