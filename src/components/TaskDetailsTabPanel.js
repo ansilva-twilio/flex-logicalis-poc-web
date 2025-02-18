@@ -7,7 +7,7 @@ import { Heading } from '@twilio-paste/core/heading';
 import WorkNotes from './WorkNotes';
 import HandleEmpty from '../assets/Utils';
 
-function RequestItemDetailsTabPanel (props) {
+function TaskDetailsTabPanel (props) {
     return (    
         <TabPanel element="MAIN_TAB_PANEL">
             <Box>
@@ -41,8 +41,8 @@ function RequestItemDetailsTabPanel (props) {
                                         <DescriptionListDetails>{ HandleEmpty(props.data?.state) }</DescriptionListDetails>
                                     </DescriptionListSet>
                                     <DescriptionListSet>
-                                        <DescriptionListTerm>Estágio</DescriptionListTerm>
-                                        <DescriptionListDetails>{ HandleEmpty(props.data?.stage) }</DescriptionListDetails>
+                                        <DescriptionListTerm>Localização</DescriptionListTerm>
+                                        <DescriptionListDetails>{ HandleEmpty(props.data?.location) }</DescriptionListDetails>
                                     </DescriptionListSet>
                                     <DescriptionListSet>
                                         <DescriptionListTerm>Item de Configuração</DescriptionListTerm>
@@ -53,8 +53,8 @@ function RequestItemDetailsTabPanel (props) {
                                         <DescriptionListDetails>{ HandleEmpty(props.data['sys_domain.name']) }</DescriptionListDetails>
                                     </DescriptionListSet>
                                     <DescriptionListSet>
-                                        <DescriptionListTerm>Tracking Flag</DescriptionListTerm>
-                                        <DescriptionListDetails>{ HandleEmpty(props.data?.u_tracking_flag) }</DescriptionListDetails>
+                                        <DescriptionListTerm>Localização do IC</DescriptionListTerm>
+                                        <DescriptionListDetails>{ HandleEmpty(props.data?.u_ci_location) }</DescriptionListDetails>
                                     </DescriptionListSet>
                                 </DescriptionList>
                             </Box>
@@ -99,21 +99,17 @@ function RequestItemDetailsTabPanel (props) {
                         <Box display="flex" columnGap="space70" width="size60">
                             <Box width="size30">
                                 <DescriptionList>
-                                    <DescriptionListSet>
-                                        <DescriptionListTerm>Follow-up com</DescriptionListTerm>
-                                        <DescriptionListDetails>{ HandleEmpty(props.data?.follow_up_with) }</DescriptionListDetails>
-                                    </DescriptionListSet>
-                                    <DescriptionListSet>
-                                        <DescriptionListTerm>Aprovação</DescriptionListTerm>
-                                        <DescriptionListDetails>{ HandleEmpty(props.data?.approval) }</DescriptionListDetails>
-                                    </DescriptionListSet>
-                                    <DescriptionListSet>
+                                     <DescriptionListSet>
                                         <DescriptionListTerm>Tipo de Contato</DescriptionListTerm>
                                         <DescriptionListDetails>{ HandleEmpty(props.data?.contact_type) }</DescriptionListDetails>
                                     </DescriptionListSet>
                                     <DescriptionListSet>
                                         <DescriptionListTerm>Tempo Trabalhado</DescriptionListTerm>
                                         <DescriptionListDetails>{ HandleEmpty(props.data?.time_worked) }</DescriptionListDetails>
+                                    </DescriptionListSet>
+                                    <DescriptionListSet>
+                                        <DescriptionListTerm>Watch List</DescriptionListTerm>
+                                        <DescriptionListDetails>{ HandleEmpty(props.data?.watch_list)}</DescriptionListDetails>
                                     </DescriptionListSet>
                                 </DescriptionList>
                             </Box>
@@ -127,20 +123,12 @@ function RequestItemDetailsTabPanel (props) {
                                         <DescriptionListTerm>Atribuído a</DescriptionListTerm>
                                         <DescriptionListDetails>{ HandleEmpty(props.data['assigned_to.name']) }</DescriptionListDetails>
                                     </DescriptionListSet>
-                                    <DescriptionListSet>
-                                        <DescriptionListTerm>Escalation</DescriptionListTerm>
-                                        <DescriptionListDetails>{ HandleEmpty(props.data?.escalation)}</DescriptionListDetails>
-                                    </DescriptionListSet>
-                                    <DescriptionListSet>
-                                        <DescriptionListTerm>Watch List</DescriptionListTerm>
-                                        <DescriptionListDetails>{ HandleEmpty(props.data?.watch_list)}</DescriptionListDetails>
-                                    </DescriptionListSet>
                                 </DescriptionList>
                             </Box>
                         </Box>
                     </Box>
                     <Box>
-                        <WorkNotes key={ "req-item-worknotes-" + props.data?.number } data={ props.data?.comments_and_work_notes } />
+                        <WorkNotes key={ "sc-task-worknotes-" + props.data?.number } data={ props.data?.comments_and_work_notes } />
                     </Box>
                     </Box>
                 </Box>
@@ -149,4 +137,4 @@ function RequestItemDetailsTabPanel (props) {
     );
 };
 
-export default RequestItemDetailsTabPanel;
+export default TaskDetailsTabPanel;

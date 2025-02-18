@@ -1,8 +1,36 @@
+import { useState } from 'react';
 import { Box, Button, Stack, Input, PageHeader, PageHeaderParagraph, PageHeaderDetails, PageHeaderHeading } from '@twilio-paste/core';
 import { SearchIcon } from '@twilio-paste/icons/esm/SearchIcon';
 import { useUID } from "@twilio-paste/core/uid-library";
 
 function NotFound() {
+    const [inputValue, setInputValue] = useState("");
+    const handleInputChange = (event) => {
+        setInputValue(event.target.value);
+    };
+
+    const handleKeyDown = (event) => {
+        if (event.key === "Enter") {
+            searchItem();
+        }
+    };
+
+    const searchItem = () => {
+        const number = inputValue;
+        if (!number.startsWith('INC') && !number.startsWith('RITM')) {
+            alert('Apenas Incidentes (INC) ou Requisições (RITM)!');
+            return;
+        }
+        const params = Object.fromEntries(new URLSearchParams(window.location.search));
+        let queryString = `?token=${params.token}`;
+        if (number.startsWith('INC')) {
+            queryString += `&incident=${number}`;
+        } else if (number.startsWith('RITM')) {
+            queryString += `&requestItem=${number}`;
+        }
+        window.location.href = window.location.origin + window.location.pathname + queryString;
+      };
+
     return (
         <Box paddingX="space100" paddingTop="space130" paddingBottom="space160">
             <PageHeader size="default">
@@ -20,11 +48,14 @@ function NotFound() {
                             <Stack orientation="horizontal">
                                 <Input width="300px"
                                     type="text"
+                                    value={inputValue} 
+                                    onChange={handleInputChange} 
+                                    onKeyDown={handleKeyDown}
                                     insertBefore={<SearchIcon decorative color="colorTextPrimary" />}
-                                    placeholder="INC ou REQ..."
+                                    placeholder="INC ou RITM..."
                                     aria-label={useUID()} />
                                 <Box width="10px" />
-                                <Button width="150px" variant='primary'>Buscar</Button>
+                                <Button onClick={searchItem} width="150px" variant='primary'>Buscar</Button>
                             </Stack>
                         </Box>
                     </Box>

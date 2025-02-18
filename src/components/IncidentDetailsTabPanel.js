@@ -2,13 +2,11 @@ import React, { useState, useEffect } from 'react';
 
 import { Paragraph } from '@twilio-paste/core/paragraph';
 import { Box } from '@twilio-paste/core/box';
-import { Combobox, Label, Grid, Column, HelpText, Input, Card, PageHeader, PageHeaderDetails, PageHeaderHeading, PageHeaderInPageNavigation, InPageNavigation, InPageNavigationItem, DescriptionListSet, DescriptionList, DescriptionListDetails, TextArea, Button, Checkbox, Stack } from '@twilio-paste/core';
+import { Combobox, Label, Grid, Column, HelpText, Input, Card, PageHeader, PageHeaderDetails, PageHeaderHeading, DescriptionListSet, DescriptionList, DescriptionListDetails, TextArea, Button, Checkbox, Stack } from '@twilio-paste/core';
 import { TabPanel } from '@twilio-paste/core/tabs';
 import { Heading } from '@twilio-paste/core/heading';
-import { useUID } from "@twilio-paste/core/uid-library";
 
 function IncidentDetailsTabPanel (props) {
-    const [workNotes, setWorkNotes] = useState([]);
     const [isComment, setIsComment] = useState(false);
     const [priority, setPriority] = useState('');
     const [impacts, setImpacts] = useState([]);
@@ -21,59 +19,10 @@ function IncidentDetailsTabPanel (props) {
     const assignableUsers = [ 'André Silva', 'Luiz Cordeiro' ];
 
     useEffect(() => {
-        console.log('Component mounted with props:', props);
-
         setImpacts([ 1, 2, 3, 4, 5 ]);
         setSelectedImpact(props.data?.impact);
         setUrgencies([ 1, 2, 3, 4, 5]);
         setSelectedUrgency(props.data?.urgency);
-
-        //TODO: consultar uma Function para obter os Work Notes
-        setWorkNotes([{
-            "sys_id": "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6",
-            "element_id": "46d44e7f1b223010abc45d8ce1050e14",
-            "name": "incident",
-            "element": "comments",
-            "value": "The user confirmed that they are experiencing intermittent connectivity issues.",
-            "sys_created_by": "Jane Smith",
-            "sys_created_on": "2024-12-25 08:45:00",
-            "update_id": "u56789abcdef12345ghijklmnopqrstuv",
-            "journal_type": "comments"
-          },
-          {
-            "sys_id": "b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6a1",
-            "element_id": "46d44e7f1b223010abc45d8ce1050e14",
-            "name": "incident",
-            "element": "work_notes",
-            "value": "Initial diagnosis shows no issues with the network. Investigating further.",
-            "sys_created_by": "John Doe",
-            "sys_created_on": "2024-12-25 09:00:00",
-            "update_id": "v56789abcdef12345ghijklmnopqrstuv",
-            "journal_type": "work_notes"
-          },
-          {
-            "sys_id": "c3d4e5f6g7h8i9j0k1l2m3n4o5p6a1b2",
-            "element_id": "46d44e7f1b223010abc45d8ce1050e14",
-            "name": "incident",
-            "element": "comments",
-            "value": "The user has requested to be updated via email once the issue is resolved.",
-            "sys_created_by": "Jane Smith",
-            "sys_created_on": "2024-12-25 09:15:00",
-            "update_id": "w56789abcdef12345ghijklmnopqrstuv",
-            "journal_type": "comments"
-          },
-          {
-            "sys_id": "d4e5f6g7h8i9j0k1l2m3n4o5p6a1b2c3",
-            "element_id": "46d44e7f1b223010abc45d8ce1050e14",
-            "name": "incident",
-            "element": "work_notes",
-            "value": "Network team confirmed no outages. Escalating to email server team.",
-            "sys_created_by": "John Doe",
-            "sys_created_on": "2024-12-25 09:30:00",
-            "update_id": "x56789abcdef12345ghijklmnopqrstuv",
-            "journal_type": "work_notes"
-          }]);
-
     // eslint-disable-next-line 
     }, []); // Empty dependency array ensures this runs only once after mounting
 
@@ -106,13 +55,6 @@ function IncidentDetailsTabPanel (props) {
                             </Paragraph>
                         </PageHeaderHeading>
                     </PageHeaderDetails>
-                    <PageHeaderInPageNavigation>
-                    <InPageNavigation aria-label={useUID()}>
-                        <InPageNavigationItem href="#" currentPage>Dados</InPageNavigationItem>
-                        <InPageNavigationItem href="#classification">Classificação</InPageNavigationItem>
-                        <InPageNavigationItem href="#notes">Notas</InPageNavigationItem>
-                    </InPageNavigation>
-                    </PageHeaderInPageNavigation>
                 </PageHeader>
                 <Box display="flex" flexDirection="column">
                     <Box display="flex" flexDirection="column" rowGap="space100">
@@ -257,7 +199,7 @@ function IncidentDetailsTabPanel (props) {
                                 Abaixo estão as notas de trabalho (amarelas - não visíveis ao cliente) e comentários (brancas - visíveis ao cliente).
                             </Paragraph>
                         </Box>
-                        {workNotes.map((item, index) => (
+                        {props.data.comments_and_worknotes?.map((item, index) => (
                             <React.Fragment key={'work_note_' + index}>
                                 <Box>
                                     <Card element={item.journal_type === 'work_notes' ? "YELLOW_NOTE_CARD" : "WHITE_NOTE_CARD"}>
