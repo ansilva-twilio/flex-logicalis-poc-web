@@ -19,6 +19,8 @@ import Unauthorized from './components/Unauthorized';
 import { customPasteElements } from './assets/CustomPasteElements';
 import './App.css';
 
+const DEFAULT_SERVER_URL = 'https://custom-flex-extensions-serverless-6794-dev.twil.io/features/service-now-helper/flex';
+
 function App() {
   const [token, setToken] = useState('');
   const [loaded, setLoaded] = useState(false);
@@ -30,6 +32,7 @@ function App() {
   const selectedId = useUID();
 
   useEffect(() => {
+    console.log('SERVER URL= '+ process.env.REACT_APP_SERVER_URL);
     const params = Object.fromEntries(new URLSearchParams(window.location.search));
     if (params.token) { 
       setToken(params.token); 
@@ -51,7 +54,7 @@ function App() {
       if (incident && incident !== "") {
         let config = {
           method: 'post',
-          url: `${process.env.REACT_APP_SERVER_URL}/getIncident`,
+          url: `${process.env.REACT_APP_SERVER_URL ?? DEFAULT_SERVER_URL}/getIncident`,
           headers: { 
             'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8', 
           },
@@ -73,7 +76,7 @@ function App() {
       } else if (requestItem && requestItem !== "") {
         let config = {
           method: 'post',
-          url: `${process.env.REACT_APP_SERVER_URL}/getRequestItem`,
+          url: `${process.env.REACT_APP_SERVER_URL ?? DEFAULT_SERVER_URL}/getRequestItem`,
           headers: { 
             'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8', 
           },
