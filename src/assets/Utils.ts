@@ -1,4 +1,4 @@
-const HandleEmpty = (val) => {
+const HandleEmpty = (val: any) => {
     const emptyString = "-- VAZIO --";
     if (!val) return emptyString;
     if (val && val === '') return emptyString;

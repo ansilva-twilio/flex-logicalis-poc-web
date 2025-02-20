@@ -1,4 +1,4 @@
-// import { PasteCustomCSS } from '@twilio-paste/customization';
+import { PasteCustomCSS } from '@twilio-paste/customization';
 
 export const customPasteElements = {
   PAGE_HEADER_DETAILS: {
@@ -20,5 +20,4 @@ export const customPasteElements = {
     borderBottom: 'solid 1px #ddd',
     padding: 'space60'
   }
-} 
-// as { [key: string]: PasteCustomCSS | any };
+} as { [key: string]: PasteCustomCSS | any };

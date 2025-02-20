@@ -1,13 +1,15 @@
+import * as React from 'react';
+
 import { Paragraph } from '@twilio-paste/core/paragraph';
 import { Box } from '@twilio-paste/core/box';
 import { PageHeader, PageHeaderDetails, PageHeaderHeading, DescriptionListSet, DescriptionList, DescriptionListTerm, DescriptionListDetails  } from '@twilio-paste/core';
 import { TabPanel } from '@twilio-paste/core/tabs';
 import { Heading } from '@twilio-paste/core/heading';
 
-import WorkNotes from './WorkNotes';
+import { WorkNotes } from './WorkNotes';
 import HandleEmpty from '../assets/Utils';
 
-function TaskDetailsTabPanel (props) {
+export const TaskDetailsTabPanel = (props:any): React.ReactElement => {
     return (    
         <TabPanel element="MAIN_TAB_PANEL">
             <Box>
@@ -136,5 +138,3 @@ function TaskDetailsTabPanel (props) {
         </TabPanel>
     );
 };
-
-export default TaskDetailsTabPanel;

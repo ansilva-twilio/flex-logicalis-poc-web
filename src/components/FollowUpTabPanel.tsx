@@ -1,9 +1,11 @@
+import * as React from 'react';
+
 import { DatePicker, TimePicker, HelpText, Button, PageHeader, PageHeaderDetails, PageHeaderHeading, PageHeaderParagraph, Form, FormControl, Label } from '@twilio-paste/core';
 import { ArrowForwardIcon } from '@twilio-paste/icons/esm/ArrowForwardIcon';
 import { TabPanel } from '@twilio-paste/core/tabs';
 import { Box } from '@twilio-paste/core/box';
 
-function FollowUpTabPanel () {
+export const FollowUpTabPanel = (): React.ReactElement => {
     return (
         <>
             <TabPanel element="MAIN_TAB_PANEL">
@@ -50,5 +52,3 @@ function FollowUpTabPanel () {
         </>
     );
 };
-
-export default FollowUpTabPanel;

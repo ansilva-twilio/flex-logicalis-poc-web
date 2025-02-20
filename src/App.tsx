@@ -1,5 +1,6 @@
+import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { isEmpty } from 'lodash';
+
 import axios from 'axios';  
 
 import { useUID } from '@twilio-paste/core/dist/uid-library';
@@ -8,31 +9,37 @@ import { Stack, SkeletonLoader } from '@twilio-paste/core';
 import { Box } from '@twilio-paste/core/box';
 import { Tabs, TabList, Tab, TabPanels } from '@twilio-paste/core/tabs';
 
-import Header from './components/Header';
-import IncidentDetailsTabPanel from './components/IncidentDetailsTabPanel';
-import RequestItemDetailsTabPanel from './components/RequestItemDetailsTabPanel';
-import TaskDetailsTabPanel from './components/TaskDetailsTabPanel';
-import FollowUpTabPanel from './components/FollowUpTabPanel';
-import KnowledgeBaseTabPanel from './components/KnowledgeBaseTabPanel';
-import NotFound from './components/NotFound';
-import Unauthorized from './components/Unauthorized';
+import { Header } from './components/Header';
+import { IncidentDetailsTabPanel } from './components/IncidentDetailsTabPanel';
+import { RequestItemDetailsTabPanel } from './components/RequestItemDetailsTabPanel';
+import { TaskDetailsTabPanel } from './components/TaskDetailsTabPanel';
+import { FollowUpTabPanel } from './components/FollowUpTabPanel';
+import { KnowledgeBaseTabPanel } from './components/KnowledgeBaseTabPanel';
+import { NotFound } from './components/NotFound';
+import { Unauthorized } from './components/Unauthorized';
 import { customPasteElements } from './assets/CustomPasteElements';
 import './App.css';
 
 const DEFAULT_SERVER_URL = 'https://custom-flex-extensions-serverless-6794-dev.twil.io/features/service-now-helper/flex';
 
-function App() {
+const isEmpty = (value: any): boolean => {
+  if (value == null) return true; // Checks for null or undefined
+  if (typeof value === "string" || Array.isArray(value)) return value.length === 0;
+  if (typeof value === "object") return Object.keys(value).length === 0;
+  return false; // Numbers, booleans, and functions are not "empty"
+};
+
+const App: React.FC = () => {
   const [token, setToken] = useState('');
   const [loaded, setLoaded] = useState(false);
-  const [data, setData] = useState({});
+  const [data, setData] = useState<any>({});
   const [noData, setNoData] = useState(false);
   const [unauthorized, setUnauthorized] = useState(false);
-  const [incident, setIncident] = useState(undefined);
-  const [requestItem, setRequestItem] = useState(undefined);
+  const [incident, setIncident] = useState('');
+  const [requestItem, setRequestItem] = useState('');
   const selectedId = useUID();
 
   useEffect(() => {
-    console.log('SERVER URL= '+ process.env.REACT_APP_SERVER_URL);
     const params = Object.fromEntries(new URLSearchParams(window.location.search));
     if (params.token) { 
       setToken(params.token); 
@@ -126,7 +133,7 @@ function App() {
                         <>
                           <Tab id={selectedId}>{ data.number }</Tab>
                           { 
-                            data.tasks?.map((item, index) => { return (
+                            data.tasks?.map((item: any, index: number) => { return (
                               <Tab key={ "sc-task-" + index}>{ data.tasks[index].number }</Tab>);
                             })
                           }
@@ -141,15 +148,15 @@ function App() {
                           <>
                             <RequestItemDetailsTabPanel data={data} />
                             { 
-                              data.tasks?.map((item, index) => { return (
+                              data.tasks?.map((item: any, index: number) => { return (
                                 <TaskDetailsTabPanel key={ "task-detail" + index} data={ data.tasks[index] } />);
                               })
                             }
                           </> 
                       }
                       
-                      <FollowUpTabPanel data={data} />
-                      <KnowledgeBaseTabPanel data={data} />
+                      <FollowUpTabPanel />
+                      <KnowledgeBaseTabPanel />
                   </TabPanels>
               </Tabs>
               </Box>

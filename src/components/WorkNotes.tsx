@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { useState } from 'react';
 
 import { Paragraph } from '@twilio-paste/core/paragraph';
@@ -5,7 +6,7 @@ import { Box } from '@twilio-paste/core/box';
 import { Label, Grid, Column, HelpText, Card, TextArea, Button, Checkbox, Stack } from '@twilio-paste/core';
 import { Heading } from '@twilio-paste/core/heading';
 
-function WorkNotes (props) {
+export const WorkNotes = (props: any): React.ReactElement => {
     const [isComment, setIsComment] = useState(false);
 
     return (
@@ -18,7 +19,7 @@ function WorkNotes (props) {
             <Box maxWidth="size80">
                 <Grid gutter="space30">
                     <Column span={8}>
-                        <Stack orientation="vertical">
+                        <Stack spacing="space0" orientation="vertical">
                             <Label htmlFor="note" required>Para adicionar uma nota, digite abaixo.  </Label>
                             <TextArea aria-describedby="note_help_text" id="note" name="note" />
                             { isComment && <HelpText id="note_help_text">Este texto <strong>será</strong> visível ao cliente.</HelpText> }
@@ -52,7 +53,7 @@ function WorkNotes (props) {
                         </Paragraph>
                     </Box>
                     { 
-                        props.data?.map((item, index) => {
+                        props.data?.map((item: any, index: number) => {
                             return (
                                 <div key={ "work-notes-" + index }>
                                     <Box>
@@ -74,6 +75,4 @@ function WorkNotes (props) {
             }
         </>
     );
-}
-
-export default WorkNotes;
+};

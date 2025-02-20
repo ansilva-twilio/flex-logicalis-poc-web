@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import * as React from 'react';
+import { useState, useEffect } from 'react';
 
 import { Paragraph } from '@twilio-paste/core/paragraph';
 import { Box } from '@twilio-paste/core/box';
@@ -6,12 +7,12 @@ import { Combobox, Label, Grid, Column, HelpText, Input, Card, PageHeader, PageH
 import { TabPanel } from '@twilio-paste/core/tabs';
 import { Heading } from '@twilio-paste/core/heading';
 
-function IncidentDetailsTabPanel (props) {
+export const IncidentDetailsTabPanel = (props: any): React.ReactElement => {
     const [isComment, setIsComment] = useState(false);
     const [priority, setPriority] = useState('');
-    const [impacts, setImpacts] = useState([]);
+    const [impacts, setImpacts] = useState<any[]>([]);
     const [selectedImpact, setSelectedImpact] = useState(0);
-    const [urgencies, setUrgencies] = useState([]);
+    const [urgencies, setUrgencies] = useState<any[]>([]);
     const [selectedUrgency, setSelectedUrgency] = useState(0);
     
     const incidentStates = [ '1 - Novo', '2 - Em andamento', '3 - Pendente', '4 - Encerrado'];
@@ -73,7 +74,7 @@ function IncidentDetailsTabPanel (props) {
                                 </DescriptionListSet>
                                 <DescriptionListSet>
                                     <DescriptionListDetails>
-                                        <Combobox id="state" name="state" items={incidentStates} initialSelectedItem={props.data?.state} labelText="Estado" required />
+                                        <Combobox name="state" items={incidentStates} initialSelectedItem={props.data?.state} labelText="Estado" required />
                                     </DescriptionListDetails>
                                 </DescriptionListSet>
                                 <DescriptionListSet>
@@ -117,7 +118,7 @@ function IncidentDetailsTabPanel (props) {
                                 <DescriptionList>
                                     <DescriptionListSet>
                                         <DescriptionListDetails>
-                                            <Combobox id="impact" name="impact" items={impacts} 
+                                            <Combobox name="impact" items={impacts} 
                                                 selectedItem={selectedImpact}
                                                 onSelectedItemChange={changes => {
                                                     console.log(changes);
@@ -128,7 +129,7 @@ function IncidentDetailsTabPanel (props) {
                                     </DescriptionListSet>
                                     <DescriptionListSet>
                                         <DescriptionListDetails>
-                                            <Combobox id="urgency" name="urgency" items={urgencies} 
+                                            <Combobox name="urgency" items={urgencies} 
                                                 selectedItem={selectedUrgency}
                                                 onSelectedItemChange={changes => {
                                                     setSelectedUrgency(changes.selectedItem);
@@ -154,12 +155,12 @@ function IncidentDetailsTabPanel (props) {
                                     </DescriptionListSet>
                                     <DescriptionListSet>
                                         <DescriptionListDetails>
-                                            <Combobox id="assignment_group" name="assignment_group" items={assignmentGroups} initialSelectedItem={ props.data?.assignment_group?.display_value} labelText="Grupo Assignado" required />
+                                            <Combobox name="assignment_group" items={assignmentGroups} initialSelectedItem={ props.data?.assignment_group?.display_value} labelText="Grupo Assignado" required />
                                         </DescriptionListDetails>
                                     </DescriptionListSet>
                                     <DescriptionListSet>
                                         <DescriptionListDetails>
-                                            <Combobox id="assigned_to" name="assigned_to" items={assignableUsers} initialSelectedItem={ props.data?.assigned_to?.display_value } labelText="Atribuido a" required />
+                                            <Combobox name="assigned_to" items={assignableUsers} initialSelectedItem={ props.data?.assigned_to?.display_value } labelText="Atribuido a" required />
                                         </DescriptionListDetails>
                                     </DescriptionListSet>
                                 </DescriptionList>
@@ -175,7 +176,7 @@ function IncidentDetailsTabPanel (props) {
                         <Box maxWidth="size80">
                             <Grid gutter="space30">
                                 <Column span={8}>
-                                    <Stack orientation="vertical">
+                                    <Stack spacing='space0' orientation="vertical">
                                         <Label htmlFor="note" required>Para adicionar uma nota, digite abaixo.  </Label>
                                         <TextArea aria-describedby="note_help_text" id="note" name="note" />
                                         { isComment && <HelpText id="note_help_text">Este texto <strong>será</strong> visível ao cliente.</HelpText> }
@@ -199,7 +200,7 @@ function IncidentDetailsTabPanel (props) {
                                 Abaixo estão as notas de trabalho (amarelas - não visíveis ao cliente) e comentários (brancas - visíveis ao cliente).
                             </Paragraph>
                         </Box>
-                        {props.data.comments_and_worknotes?.map((item, index) => (
+                        {props.data.comments_and_worknotes?.map((item: any, index: number) => (
                             <React.Fragment key={'work_note_' + index}>
                                 <Box>
                                     <Card element={item.journal_type === 'work_notes' ? "YELLOW_NOTE_CARD" : "WHITE_NOTE_CARD"}>
@@ -219,5 +220,3 @@ function IncidentDetailsTabPanel (props) {
         </TabPanel>
     );
 };
-
-export default IncidentDetailsTabPanel;

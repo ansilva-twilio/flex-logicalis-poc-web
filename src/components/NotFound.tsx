@@ -1,15 +1,17 @@
+import * as React from 'react';
 import { useState } from 'react';
+
 import { Box, Button, Stack, Input, PageHeader, PageHeaderParagraph, PageHeaderDetails, PageHeaderHeading } from '@twilio-paste/core';
 import { SearchIcon } from '@twilio-paste/icons/esm/SearchIcon';
 import { useUID } from "@twilio-paste/core/uid-library";
 
-function NotFound() {
+export const NotFound = (): React.ReactElement => {
     const [inputValue, setInputValue] = useState("");
-    const handleInputChange = (event) => {
+    const handleInputChange = (event: any) => {
         setInputValue(event.target.value);
     };
 
-    const handleKeyDown = (event) => {
+    const handleKeyDown = (event: any) => {
         if (event.key === "Enter") {
             searchItem();
         }
@@ -45,8 +47,8 @@ function NotFound() {
                 <Box display="flex" flexDirection="column" rowGap="space50" marginBottom="space90">
                     <Box display="flex" columnGap="space80" maxWidth="size180">
                         <Box maxWidth="size110">
-                            <Stack orientation="horizontal">
-                                <Input width="300px"
+                            <Stack spacing="space0" orientation="horizontal">
+                                <Input
                                     type="text"
                                     value={inputValue} 
                                     onChange={handleInputChange} 
@@ -55,7 +57,7 @@ function NotFound() {
                                     placeholder="INC ou RITM..."
                                     aria-label={useUID()} />
                                 <Box width="10px" />
-                                <Button onClick={searchItem} width="150px" variant='primary'>Buscar</Button>
+                                <Button onClick={searchItem} variant='primary'>Buscar</Button>
                             </Stack>
                         </Box>
                     </Box>
@@ -64,5 +66,3 @@ function NotFound() {
         </Box>
     );
 };
-
-export default NotFound;
