@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/flex-logicalis-poc-web/static/css/main.6bf2419c.css",
-    "main.js": "/flex-logicalis-poc-web/static/js/main.49b66d57.js",
+    "main.js": "/flex-logicalis-poc-web/static/js/main.e5fc72c7.js",
     "static/js/453.866f3678.chunk.js": "/flex-logicalis-poc-web/static/js/453.866f3678.chunk.js",
     "index.html": "/flex-logicalis-poc-web/index.html",
     "main.6bf2419c.css.map": "/flex-logicalis-poc-web/static/css/main.6bf2419c.css.map",
-    "main.49b66d57.js.map": "/flex-logicalis-poc-web/static/js/main.49b66d57.js.map",
+    "main.e5fc72c7.js.map": "/flex-logicalis-poc-web/static/js/main.e5fc72c7.js.map",
     "453.866f3678.chunk.js.map": "/flex-logicalis-poc-web/static/js/453.866f3678.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.6bf2419c.css",
-    "static/js/main.49b66d57.js"
+    "static/js/main.e5fc72c7.js"
   ]
 }
