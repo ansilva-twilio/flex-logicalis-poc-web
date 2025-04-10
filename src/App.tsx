@@ -1,14 +1,11 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 
-import axios from 'axios';  
-
 import { useUID } from '@twilio-paste/core/dist/uid-library';
 import { CustomizationProvider } from '@twilio-paste/core/dist/customization';
 import { Stack, SkeletonLoader } from '@twilio-paste/core';
 import { Box } from '@twilio-paste/core/box';
 import { Tabs, TabList, Tab, TabPanels } from '@twilio-paste/core/tabs';
-
 import { Header } from './components/Header';
 import { IncidentDetailsTabPanel } from './components/IncidentDetailsTabPanel';
 import { RequestItemDetailsTabPanel } from './components/RequestItemDetailsTabPanel';
@@ -18,9 +15,9 @@ import { KnowledgeBaseTabPanel } from './components/KnowledgeBaseTabPanel';
 import { NotFound } from './components/NotFound';
 import { Unauthorized } from './components/Unauthorized';
 import { customPasteElements } from './assets/CustomPasteElements';
-import './App.css';
 
-const DEFAULT_SERVER_URL = 'https://custom-flex-extensions-serverless-6794-dev.twil.io/features/service-now-helper/flex';
+import './App.css';
+import { ServiceNowService } from './services/ServiceNowService';
 
 const isEmpty = (value: any): boolean => {
   if (value == null) return true; // Checks for null or undefined
@@ -37,6 +34,7 @@ const App: React.FC = () => {
   const [unauthorized, setUnauthorized] = useState(false);
   const [incident, setIncident] = useState('');
   const [requestItem, setRequestItem] = useState('');
+  const [tasks, setTasks] = useState<any[]>([]);
   const selectedId = useUID();
 
   useEffect(() => {
@@ -59,50 +57,37 @@ const App: React.FC = () => {
   useEffect(() => {
     if (token) {
       if (incident && incident !== "") {
-        let config = {
-          method: 'post',
-          url: `${process.env.REACT_APP_SERVER_URL ?? DEFAULT_SERVER_URL}/getIncident`,
-          headers: { 
-            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8', 
-          },
-          data: {
-            Token: token,
-            number: incident
-          }
-        };
-        axios.request(config)
+        ServiceNowService.getIncident(incident)
           .then((response) => { 
-            setData(response.data.data); 
+            setData(response); 
           })
           .catch((_err) => { 
-            console.log('Incident not found'); 
-          })
-          .finally(async () => {
-            setLoaded(true); 
-          });
-      } else if (requestItem && requestItem !== "") {
-        let config = {
-          method: 'post',
-          url: `${process.env.REACT_APP_SERVER_URL ?? DEFAULT_SERVER_URL}/getRequestItem`,
-          headers: { 
-            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8', 
-          },
-          data: {
-            Token: token,
-            number: requestItem
-          }
-        };
-
-        axios.request(config)
-          .then((response) => { 
-            setData(response.data.data); 
-          })
-          .catch((_err) => { 
-            console.log('Request Item not found'); 
+            console.error('Incident not found', _err); 
           })
           .finally(() => {
             setLoaded(true); 
           });
+      } else if (requestItem && requestItem !== "") {
+        ServiceNowService.getRequestItem(requestItem)
+          .then((response) => { 
+            setData(response); 
+            const requestId = (response as any)?.sys_id;
+            ServiceNowService.getTasks(requestId)
+              .then((taskResponse) => {
+                const tasks: any[] = [];
+                taskResponse?.data?.forEach((task: any) => {
+                  tasks.push(task);
+                });
+                setTasks(tasks);
+              })
+              .finally(() => {
+                setLoaded(true); 
+              });
+          })
+          .catch((_err) => { 
+            console.error('Request Item not found', _err); 
+          })
+          
       }
     } 
   }, [incident, requestItem, token]);
@@ -128,42 +113,30 @@ const App: React.FC = () => {
               <Box style={{ padding: '1.25rem'}}>
                 <Tabs selectedId={selectedId} baseId="horizontal-tabs-example">
                   <TabList aria-label="Horizontal product tabs">
-                      { incident && <Tab id={selectedId}>{ data.number }</Tab> }
-                      { requestItem && 
-                        <>
-                          <Tab id={selectedId}>{ data.number }</Tab>
-                          { 
-                            data.tasks?.map((item: any, index: number) => { return (
-                              <Tab key={ "sc-task-" + index}>{ data.tasks[index].number }</Tab>);
-                            })
-                          }
-                        </> 
+                      { incident && <Tab id={selectedId}>{data?.number}</Tab> }
+                      { requestItem && <Tab id={selectedId}>{data?.number}</Tab> }
+                      { tasks && tasks.map((item: any, index: number) => { 
+                          return (<Tab key={ "task-tab-" + index}>{ item?.number }</Tab>);
+                        }) 
                       }
                       <Tab>Follow Up</Tab>
                       <Tab>Base de Conhecimento</Tab>
                   </TabList>
                   <TabPanels>
                       { incident && <IncidentDetailsTabPanel data={data} /> }
-                      { requestItem && 
-                          <>
-                            <RequestItemDetailsTabPanel data={data} />
-                            { 
-                              data.tasks?.map((item: any, index: number) => { return (
-                                <TaskDetailsTabPanel key={ "task-detail" + index} data={ data.tasks[index] } />);
-                              })
-                            }
-                          </> 
+                      { requestItem && <RequestItemDetailsTabPanel data={data} /> }
+                      { tasks && tasks.map((item: any, index: number) => { 
+                          return (<TaskDetailsTabPanel key={ "task-tab-panel" + index} data={item} />);
+                        }) 
                       }
-                      
-                      <FollowUpTabPanel />
-                      <KnowledgeBaseTabPanel />
+                      <FollowUpTabPanel token={token} />
+                      <KnowledgeBaseTabPanel token={token} />
                   </TabPanels>
               </Tabs>
               </Box>
             ) : ( 
               <Box padding="space60">
                 <Stack orientation="vertical" spacing="space20">
-                  <SkeletonLoader />
                   <SkeletonLoader />
                   <SkeletonLoader />
                   <SkeletonLoader />

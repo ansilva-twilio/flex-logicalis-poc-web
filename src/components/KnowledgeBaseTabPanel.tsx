@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import * as React from 'react';
+import axios from 'axios';  
 
 import { ArtificialIntelligenceIcon } from '@twilio-paste/icons/esm/ArtificialIntelligenceIcon';
 import { SendIcon } from '@twilio-paste/icons/esm/SendIcon';
@@ -47,19 +48,17 @@ const EnterKeySubmitPlugin = ({ onKeyDown }: { onKeyDown: () => void }): null =>
     return null;
 };
 
-export const KnowledgeBaseTabPanel = (): React.ReactElement => {
+const DEFAULT_SERVER_URL = 'https://custom-flex-extensions-serverless-6794-dev.twil.io/features/azure-search-helper/flex';
+
+export const KnowledgeBaseTabPanel = (props: any): React.ReactElement => {
     const [activeChat, setActiveChat] = useState(false);
     const [message, setMessage] = useState("");
-    const [mounted, setMounted] = useState(false);
+    const [mounted] = useState(false);
     const [loading, setLoading] = useState(false);
     const loggerRef = useRef(null);
     const scrollerRef = useRef(null);
 
     const { aiChats, push, pop } = useAIChatLogger();
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
 
     useEffect(() => {
         if (!mounted || !loggerRef.current) return;
@@ -91,9 +90,18 @@ export const KnowledgeBaseTabPanel = (): React.ReactElement => {
     };
 
     const sendMessageToAI = (message: string) => {
-        // TODO: Send to AI
-        // Something like axios.post('https://ai.logicalis.la.com/', message);
-
+        let config = {
+            method: 'post',
+            url: `${DEFAULT_SERVER_URL}/query`,
+            headers: { 
+              'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8', 
+            },
+            data: {
+              Token: props.token,
+              userInput: message
+            }
+          };
+          
         const loadingChatContent = (
             <AIChatMessage variant="bot">
                 <AIChatMessageAuthor aria-label="AI said">Logicalis Bot</AIChatMessageAuthor>
@@ -105,31 +113,34 @@ export const KnowledgeBaseTabPanel = (): React.ReactElement => {
 
         const loadingChatID = uid(loadingChatContent);
         setLoading(true);
-
+        
         push({
             id: loadingChatID,
             variant: 'bot',
             content: loadingChatContent,
         });
-        setTimeout(() => {
-            pop(loadingChatID);
-            setLoading(false);
-            setTimeout(() => {
+
+        axios.request(config)
+            .then((response) => { 
+                pop(loadingChatID);
                 push({
                     variant: 'bot',
                     content: (
                         <AIChatMessage variant="bot">
                             <AIChatMessageAuthor aria-label="Logicalis Bot said">Logicalis Bot</AIChatMessageAuthor>
                             <AIChatMessageBody>
-                                Resposta da IA
+                                { response?.data?.data }
                             </AIChatMessageBody>
                         </AIChatMessage>
                     ),
                 });
-                
-            }, 500);
-        }, 1000);
-        
+            })
+            .catch((_err) => { 
+              console.error('Could not query Azure Search...', _err); 
+            })
+            .finally(async () => {
+                setLoading(false); 
+            });
     };
 
     // eslint-disable-next-line

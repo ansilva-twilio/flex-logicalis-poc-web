@@ -19,5 +19,15 @@ export const customPasteElements = {
     borderRight: 'solid 1px #ddd',
     borderBottom: 'solid 1px #ddd',
     padding: 'space60'
+  },
+  FORM_DETAILS: {
+    width: '100%'
+  },
+  LOADING_FIELD: {
+    height: '36px'
+  },
+  LOADING_TEXT: {
+    fontStyle: 'italic',
+    color: '#777'
   }
 } as { [key: string]: PasteCustomCSS | any };

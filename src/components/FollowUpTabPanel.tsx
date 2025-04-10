@@ -5,7 +5,7 @@ import { ArrowForwardIcon } from '@twilio-paste/icons/esm/ArrowForwardIcon';
 import { TabPanel } from '@twilio-paste/core/tabs';
 import { Box } from '@twilio-paste/core/box';
 
-export const FollowUpTabPanel = (): React.ReactElement => {
+export const FollowUpTabPanel = (props: any): React.ReactElement => {
     return (
         <>
             <TabPanel element="MAIN_TAB_PANEL">
